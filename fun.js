@@ -25,78 +25,20 @@ var genParam = function (piece, indent) {
 //list a as b (step num) (limit num) (asc)
 //list num as b (to num) (step 2)(limit num) (desc)
 var genList = function (piece, indent) {
-    var listObj = {};
-    _getListObject(piece["type"], listObj);
-    console.log("", JSON.stringify(listObj, 4, 4));
-/*
-    if(listObj["type"] == "number"){                    //处理数据类型
-        for(var i=begin, len= length; i<len; i+=x){
-
-        }
-    }
-*/
-
-
-    var list = [];
-    list.push([false, "var listVal  = findValue(g, l, \"" + piece["type"][1] + "\")"])
+    var list = [], listObj = {};
+    var listName = piece["type"].indexOf("as") == -1
+        ? "$_" : piece["type"][piece["type"].indexOf("as") + 1];
+    list.push([false, "var listVal  = findListValue(g, l, " + JSON.stringify(piece["type"]) + ")"]);
     list.push([false, "var stackLen = l.length"]);
     list.push([false, "l[stackLen] = {}"]);
     list.push([false, "l = copyObject(l)"]);
     var begin = "for(var i in listVal){";
     var end = "}";
     var newList = [];
-    newList.push([false, "l[stackLen][\"" + piece["type"][3] + "\"] = listVal[i]"]);
+    newList.push([false, "l[stackLen][\"" + listName + "\"] = listVal[i]"]);
     _getChildrenList(piece["children"], newList, indent + 2);
     list.push([false, mergeSentence(newList, indent + 2, undefined, begin, end, false), 0, ""]);
     return [true, mergeSentence(list, indent + 1, piece["content"])];
-
-};
-
-//list a as b (step num) (limit num) (asc)
-//list num as b (to num) (step 2)(limit num) (desc)
-var _getListObject = function(piece, obj){
-    var newPiece = utils.copyObject(piece);
-    var len = piece.length;
-    obj["order"] = "asc";
-    obj["type"]  = utils.isNum(piece[1]) ? "number" : "param";
-    if(len % 2 == 1){
-        if(piece.indexOf("asc") != -1)
-            piece.splice(piece.indexOf("asc"), 1);
-        else if(piece.indexOf("desc")) {
-            obj["order"] = "desc";
-            console.log("ordderrrrrrrrrrrrrrrrrrrrrrrrrrrrr, ", obj["order"]);
-            piece.splice(piece.indexOf("desc"), 1);
-        }
-    }
-    if(piece.indexOf("as") == -1) return _getListObject(piece.concat(["as", "$_"]), obj);             //list a   ==> list a as $_
-    for(var i=0;i<piece.length;i+=2){
-        obj[piece[i]] = piece[i+1];
-    }
-    //对数据进行深加工！！！！
-    if(obj["type"] == "number"){
-        obj["list"] = parseFloat(obj["list"]);
-        obj["to"]   = parseFloat(obj["to"] || (false ? parseFloat(obj["to"]) : 0));
-        obj["step"] = obj["step"] == undefined ? 1 : Math.abs(parseFloat(obj["step"]));
-        var tem = [obj["list"], obj["to"]].sort();   //上面没有转彻底，现在在这儿补一刀， 以后再规范一下
-        if(obj["order"] == "desc"){
-            tem.reverse();
-            obj["step"] == - obj["step"];
-        }
-        obj["list"] = tem[0];
-        obj["to"]   = tem[1];
-    }else {                                             // 处理 param 类型的数据，小心有地雷！
-        //list a as b (step num) (limit num) (asc)
-        //使用  for 循环完成数据的调用，哦哦！
-        obj["list"]  = 0;
-        obj["to"]    = "(listVal.length-1)";
-        obj["limit"] = obj["limit"] == undefined ? "Number.POSITIVE_INFINITY" : obj["limit"];
-        obj["step"] = obj["step"] == undefined ? 1 : Math.abs(parseFloat(obj["step"]));
-        if(obj["order"] == "desc"){
-            obj["list"] = obj["to"];
-            obj["to"] = 0;
-            obj["step"] = - obj["step"];
-        }
-    }
 };
 
 //目前暂定 map 的形式为
@@ -104,7 +46,7 @@ var _getListObject = function(piece, obj){
 //其实怎么写都差不多，现在又不用执行，也执行不了
 var genMap = function (piece, indent) {
     var list = [];
-    list.push([false, "var listVal  = findValue(g, l, \"" + piece["type"][1] + "\")"])
+    list.push([false, "var listVal  = findValue(g, l, \"" + piece["type"][1] + "\")"]);
     list.push([false, "var localLen = l.length"]);
     list.push([false, "l[localLen] = []"]);
     list.push([false, "l = copyObject(l)"]);                                //重新复制拷贝变量，但是又不影响前面的变量使用
@@ -150,16 +92,16 @@ var genElif = function (piece, indent) {
 // concat 类型的主要麻烦是除去语句中的 占位符， 并再次进行缩进，下面， 看我来耍大刀！
 var genScript = function (piece, indent) {
     var list = [];
-    if(piece["children"].length != 0){
+    if (piece["children"].length != 0) {
         var scriptList = piece["children"][0]["content"].split(args.newLine);
         var newList = [];
-        for(var i= 0, len = scriptList.length; i<len; i++)
-            if(utils.trim(scriptList[i]) != 0) newList.push(scriptList[i]);
+        for (var i = 0, len = scriptList.length; i < len; i++)
+            if (utils.trim(scriptList[i]) != 0) newList.push(scriptList[i]);
         var blank = newList[0].match(/^\s/)[0];
-        for(var i= 0, len=newList.length;i <len; i++)
-            list.push([false, utils.trimBlank(newList[i], blank),0, ""]);
+        for (var i = 0, len = newList.length; i < len; i++)
+            list.push([false, utils.trimBlank(newList[i], blank), 0, ""]);
     }
-    if(piece["type"][1] == "concat"){
+    if (piece["type"][1] == "concat") {
         list[0][0] = true;
     }
     return [true, mergeSentence(list, indent + 1, piece["content"])];

@@ -21,7 +21,7 @@ for (var i = 0; i < 1; i++) {
         //global 是一个 对象，
         // local 是一个 数组， 数组的每一层代表一层嵌套， 在代码中会定义这么一个 层的代表
         // 由于自定义语言的限制， 栈内不会存放很多东西， 每次for 循环， 存放一个变量
-        g = {"a": [[1,2,3], [1,2,3], [1,2,3]]};
+        g = {"a":[1,2,3,4,5,6,7,8,9]};
         var l = [];
         var generatedString = run.runGeneratedFunction(g, l, generateFuntion);
         console.log("\n\ngenerated String:\n", generatedString);
