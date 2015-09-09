@@ -161,6 +161,10 @@ var judgeIf = function (g, l, value) {
     return false;
 };
 
+var generateAnonymoussFunction = function(funString){
+    return eval(funString.substring(0, funString.lastIndexOf(")")));
+};
+
 var runGeneratedFunction = function (g, l, fun) {
     return eval(fun);
 };

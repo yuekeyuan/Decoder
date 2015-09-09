@@ -11,6 +11,8 @@ var singleMark = ["html", "blank", "extends", "include", "import", "fun", "=", "
 var doubleMark = ["list", "map", "block", "if", "script"];
 var unFuncMark = ["block", "if"];
 
+var preCompileTemplate = ["index.yky"];
+
 module.exports = {
     spliter: spliter,
     newLine: newLine,
@@ -21,5 +23,6 @@ module.exports = {
     UNFUNCMARK: unFuncMark,
     ISFUNCTIONCOMMENT: isFunctonComment,
     RETURNEDNUL: returnedNil,
-    TABLENGTH: tabLength
+    TABLENGTH: tabLength,
+    PRECOMPILETEMPLATE: preCompileTemplate
 };
