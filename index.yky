@@ -1,1 +1,3 @@
-{{fun plugin.a}}
+{{list 5}}
+number :{{= $_}}
+{{end list}}

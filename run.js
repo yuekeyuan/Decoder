@@ -162,7 +162,7 @@ var judgeIf = function (g, l, value) {
 };
 
 var generateAnonymoussFunction = function(funString){
-    return eval(funString.substring(0, funString.lastIndexOf(")")));
+    return eval(funString.substring(0, funString.lastIndexOf("}") + 2));
 };
 
 var runGeneratedFunction = function (g, l, fun) {
@@ -170,5 +170,6 @@ var runGeneratedFunction = function (g, l, fun) {
 };
 
 module.exports = {
-    runGeneratedFunction: runGeneratedFunction
+    runGeneratedFunction: runGeneratedFunction,
+    generateAnonymoussFunction: generateAnonymoussFunction
 };

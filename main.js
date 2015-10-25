@@ -7,13 +7,12 @@ startTime = new Date().getTime();
 
 var finallTemplate = null;
 var generateFuntion = null;
-var generatedString = null;
 for (var i = 0; i < 1; i++) {
     if (false) {
         var generatedString = run.runGeneratedFunction([], [], generateFuntion);
     } else {
         finallTemplate = lex.generateFile("index.yky");
-        //console.log("genrated template:\n", JSON.stringify(finallTemplate, 4, 4));
+        console.log("genrated template:\n", JSON.stringify(finallTemplate, 4, 4));
 
         generateFuntion = fun.genChildren(finallTemplate, 0, "main Function started");
         console.log("\n\ngenerated function:\n", generateFuntion);

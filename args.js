@@ -12,6 +12,7 @@ var doubleMark = ["list", "map", "block", "if", "script"];
 var unFuncMark = ["block", "if"];
 
 var preCompileTemplate = ["index.yky"];
+var canPreCompileTemplate = true;
 
 module.exports = {
     spliter: spliter,
@@ -24,5 +25,6 @@ module.exports = {
     ISFUNCTIONCOMMENT: isFunctonComment,
     RETURNEDNUL: returnedNil,
     TABLENGTH: tabLength,
-    PRECOMPILETEMPLATE: preCompileTemplate
+    PRECOMPILETEMPLATE: preCompileTemplate,
+    CANPRECOMPILETEMPLATE: canPreCompileTemplate
 };
